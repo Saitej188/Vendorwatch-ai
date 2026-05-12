@@ -60,9 +60,9 @@ VendorWatch AI solves this by continuously converting raw job postings into stru
         │        Intelligence Layer (Analytics)        │
         │  • Skill extraction (NLP keyword mining)     │
         │  • Hiring trend detection                    │
-        │  • Company dominance scoring                │
-        │  • Remote vs onsite analysis                │
-        │  • Market intelligence reporting            │
+        │  • Company dominance scoring                 │
+        │  • Remote vs onsite analysis                 │
+        │  • Market intelligence reporting             │
         └──────────────────────────────────────────────┘
 🧠 Key Features
 🔹 Data Engineering Pipeline
