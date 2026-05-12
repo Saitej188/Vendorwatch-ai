@@ -203,38 +203,38 @@ Data extraction → transformation → storage → API layer → analytics → i
 It is designed to simulate how real-world B2B intelligence platforms operate.
 ## 📸 Screenshots
 
+## 📸 Screenshots
+
 ### 🖥️ Streamlit Dashboard
 
-<img src="https://github.com/user-attachments/assets/2808892f-218a-4fe9-a523-959dbeafd13e" width="900"/>
+![Dashboard 1](https://github.com/user-attachments/assets/2808892f-218a-4fe9-a523-959dbeafd13e)
 
-<img src="https://github.com/user-attachments/assets/e32f3d8a-76ad-4cf4-9006-325c81d6d4b6" width="900"/>
+![Dashboard 2](https://github.com/user-attachments/assets/e32f3d8a-76ad-4cf4-9006-325c81d6d4b6)
 
-<img src="https://github.com/user-attachments/assets/0565000b-0a5a-461b-ab24-cc42964f1a3b" width="900"/>
+![Dashboard 3](https://github.com/user-attachments/assets/0565000b-0a5a-461b-ab24-cc42964f1a3b)
 
 ---
 
 ### 📊 Job Table View
 
-<img src="https://github.com/user-attachments/assets/f2fd63fc-8272-4a8a-9ce0-bbef9f3d0783" width="900"/>
+![Job Table](https://github.com/user-attachments/assets/f2fd63fc-8272-4a8a-9ce0-bbef9f3d0783)
 
 ---
 
 ### ⚡ FastAPI Swagger UI
 
-<img src="https://github.com/user-attachments/assets/f910438a-22a8-4f08-83fe-248bb9db7343" width="900"/>
+![Swagger 1](https://github.com/user-attachments/assets/f910438a-22a8-4f08-83fe-248bb9db7343)
 
-<img src="https://github.com/user-attachments/assets/40d42845-bbdb-47eb-b772-b2cf715f6d81" width="900"/>
+![Swagger 2](https://github.com/user-attachments/assets/40d42845-bbdb-47eb-b772-b2cf715f6d81)
 
 ---
 
 ### 🧠 AI Insights (JSON Output)
 
-<img src="https://github.com/user-attachments/assets/ddf908e7-a76c-417a-80b0-a40a732d1804" width="900"/>
+![Insights](https://github.com/user-attachments/assets/ddf908e7-a76c-417a-80b0-a40a732d1804)
 
 ---
 
 ### 📄 Market Intelligence Report
 
-<img src="https://github.com/user-attachments/assets/bcc1d5b1-ca70-4e20-a55d-783f943f2e68" width="900"/>
-5.Market Report
-<img width="1908" height="809" alt="image" src="https://github.com/user-attachments/assets/bcc1d5b1-ca70-4e20-a55d-783f943f2e68" />
+![Report](https://github.com/user-attachments/assets/bcc1d5b1-ca70-4e20-a55d-783f943f2e68)
