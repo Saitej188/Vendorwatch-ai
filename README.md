@@ -202,9 +202,8 @@ Data extraction → transformation → storage → API layer → analytics → i
 
 It is designed to simulate how real-world B2B intelligence platforms operate.
 1. 🖥️ Streamlit Dashboard
-<img width="1912" height="941" alt="image" src="https://github.com/user-attachments/assets/2808892f-218a-4fe9-a523-959dbeafd13e" />
-<img width="1908" height="821" alt="image" src="https://github.com/user-attachments/assets/e32f3d8a-76ad-4cf4-9006-325c81d6d4b6" />
-<img width="1909" height="915" alt="image" src="https://github.com/user-attachments/assets/0565000b-0a5a-461b-ab24-cc42964f1a3b" />
+<img width="1907" height="929" alt="image" src="https://github.com/user-attachments/assets/232a9ac8-3049-41da-8e3d-1f2c5c61c0f5" />
+
 📊 2. Job Table
 <img width="1905" height="848" alt="image" src="https://github.com/user-attachments/assets/f2fd63fc-8272-4a8a-9ce0-bbef9f3d0783" />
 ⚡ 3. FastAPI Swagger UI
