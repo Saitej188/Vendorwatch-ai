@@ -238,3 +238,5 @@ It is designed to simulate how real-world B2B intelligence platforms operate.
 ### 📄 Market Intelligence Report
 
 ![Report](https://github.com/user-attachments/assets/bcc1d5b1-ca70-4e20-a55d-783f943f2e68)
+<img width="1907" height="929" alt="Screenshot 2026-05-12 170319" src="https://github.com/user-attachments/assets/2b2ee7bb-9dca-491f-9c85-ae06d7e5af73" />
+
