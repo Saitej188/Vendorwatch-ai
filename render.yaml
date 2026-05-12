@@ -2,13 +2,11 @@ services:
   - type: web
     name: vendorwatch-ai
     env: python
-    runtime: python-3.11.9
-    branch: main
     plan: starter
 
     buildCommand: pip install --upgrade pip && pip install -r requirements.txt
 
-    startCommand: streamlit run streamlit_app.py --server.port $PORT --server.enableCORS false
+    startCommand: streamlit run streamlit_app.py --server.port $PORT --server.address 0.0.0.0
 
     envVars:
       - key: PYTHONUNBUFFERED
