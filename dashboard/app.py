@@ -34,8 +34,18 @@ except Exception as e:
     st.stop()
 
 if df.empty:
-    st.warning("No jobs found in the database. Run `python pipeline/run_pipeline.py` to load data.")
-    st.stop()
+    st.info("No jobs found in the database. Initializing data now...")
+    try:
+        from pipeline.run_pipeline import run_pipeline
+        run_pipeline()
+        df = pd.read_sql("jobs", engine)
+    except Exception as e:
+        st.error(f"Failed to initialize data: {e}")
+        st.stop()
+
+    if df.empty:
+        st.warning("Still no job data available after initialization.")
+        st.stop()
 
 # Safety cleanup
 df["company"] = df["company"].fillna("Unknown")
