@@ -1,11 +1,14 @@
 from fastapi import FastAPI, Query
 import pandas as pd
-from database.db import engine
+from database.db import engine, init_db
 
 from ml.insights import generate_insights
 from ml.report import generate_report
 
 app = FastAPI(title="VendorWatch AI")
+
+# Ensure the database schema exists before serving API requests.
+init_db()
 
 # ------------------------
 # HEALTH CHECK

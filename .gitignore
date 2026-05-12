@@ -1,0 +1,18 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+
+# SQLite database
+vendorwatch.db
+
+# Streamlit local files
+.streamlit/*
+!.streamlit/config.toml
+
+# OS files
+.DS_Store
+Thumbs.db
