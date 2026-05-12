@@ -1,104 +1,139 @@
-from fastapi import FastAPI, Query
+import sys
+import os
+import streamlit as st
 import pandas as pd
-from database.db import engine, init_db
 
-from ml.insights import generate_insights
-from ml.report import generate_report
+# ==============================
+# SAFE ROOT PATH (HF FIX)
+# ==============================
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, ROOT_DIR)
 
-app = FastAPI(title="VendorWatch AI")
+# ==============================
+# IMPORTS (SAFE WRAPPED)
+# ==============================
+try:
+    from database.db import engine, init_db
+    from ml.insights import generate_insights
+    from ml.report import generate_report
+except Exception as e:
+    st.error(f"Import error: {e}")
+    st.stop()
 
-# Ensure the database schema exists before serving API requests.
-init_db()
+# ==============================
+# UI CONFIG
+# ==============================
+st.set_page_config(page_title="VendorWatch AI", layout="wide")
+st.title("📊 VendorWatch AI – Job Intelligence Dashboard")
 
-# ------------------------
-# HEALTH CHECK
-# ------------------------
-@app.get("/")
-def home():
-    return {"status": "running"}
+# ==============================
+# INIT DB (SAFE)
+# ==============================
+try:
+    init_db()
+except Exception as e:
+    st.warning(f"DB init warning: {e}")
 
-# ------------------------
-# GET ALL JOBS
-# ------------------------
-@app.get("/jobs")
-def get_jobs():
+# ==============================
+# LOAD DATA (SAFE)
+# ==============================
+try:
     df = pd.read_sql("jobs", engine)
-    df = df.sort_values(by="company")
-    return df.to_dict(orient="records")
+except Exception as e:
+    st.error(f"Database error: {e}")
+    st.info("Run pipeline first or ensure DB exists.")
+    st.stop()
 
-# ------------------------
-# SEARCH JOBS
-# ------------------------
-@app.get("/jobs/search")
-def search(q: str = Query(...)):
-    df = pd.read_sql("jobs", engine)
-    result = df[df["title"].str.contains(q, case=False, na=False)]
-    return result.to_dict(orient="records")
+# ==============================
+# EMPTY DATA HANDLING
+# ==============================
+if df is None or df.empty:
+    st.warning("No data found in database.")
+    st.stop()
 
-# ------------------------
-# SMART SEARCH (TOP 1% FEATURE)
-# ------------------------
-@app.get("/jobs/smart-search")
-def smart_search(q: str):
-    df = pd.read_sql("jobs", engine)
+# ==============================
+# CLEAN DATA
+# ==============================
+df["company"] = df["company"].fillna("Unknown")
+df["title"] = df["title"].fillna("Unknown")
 
-    df["score"] = (
-        df["title"].str.contains(q, case=False, na=False).astype(int) * 2 +
-        df["company"].str.contains(q, case=False, na=False).astype(int)
-    )
+# ==============================
+# KPIs
+# ==============================
+st.subheader("📌 Key Metrics")
 
-    result = df[df["score"] > 0].sort_values("score", ascending=False)
+col1, col2, col3 = st.columns(3)
 
-    return result.drop(columns=["score"]).to_dict(orient="records")
+col1.metric("Total Jobs", len(df))
+col2.metric("Remote Jobs", int(df["is_remote"].sum()))
+col3.metric("Senior Roles", int(df["is_senior"].sum()))
 
-# ------------------------
-# FILTER: REMOTE JOBS
-# ------------------------
-@app.get("/jobs/remote")
-def remote_jobs():
-    df = pd.read_sql("jobs", engine)
-    return df[df["is_remote"] == True].to_dict(orient="records")
+st.divider()
 
-# ------------------------
-# TOP COMPANIES
-# ------------------------
-@app.get("/jobs/top-companies")
-def top_companies():
-    df = pd.read_sql("jobs", engine)
-    return df["company"].value_counts().head(10).to_dict()
+# ==============================
+# FILTERS
+# ==============================
+st.subheader("🔎 Filters")
 
-# ------------------------
-# JOB SUMMARY (INTERVIEW GOLD)
-# ------------------------
-@app.get("/jobs/summary")
-def job_summary():
-    df = pd.read_sql("jobs", engine)
+company_filter = st.selectbox("Company", ["All"] + sorted(df["company"].unique()))
 
-    return {
-        "total_jobs": len(df),
-        "remote_jobs": int(df["is_remote"].sum()),
-        "top_company": df["company"].value_counts().idxmax(),
-        "senior_jobs": int(df["is_senior"].sum())
-    }
+remote_filter = st.radio("Remote Only?", ["All", "Yes"])
 
-# ------------------------
-# AI INSIGHTS (ML LAYER)
-# ------------------------
-@app.get("/insights")
-def insights():
-    try:
-        df = pd.read_sql("jobs", engine)
-        return generate_insights(df)
-    except Exception as e:
-        return {"error": str(e)}
+filtered_df = df.copy()
 
-# ------------------------
-# REPORT (BUSINESS LAYER)
-# ------------------------
-@app.get("/report")
-def report():
-    try:
-        df = pd.read_sql("jobs", engine)
-        return generate_report(df)
-    except Exception as e:
-        return {"error": str(e)}
+if company_filter != "All":
+    filtered_df = filtered_df[filtered_df["company"] == company_filter]
+
+if remote_filter == "Yes":
+    filtered_df = filtered_df[filtered_df["is_remote"] == True]
+
+# ==============================
+# TABLE
+# ==============================
+st.subheader("📄 Job Listings")
+st.dataframe(filtered_df, use_container_width=True)
+
+# ==============================
+# CHARTS
+# ==============================
+st.subheader("📊 Top Companies")
+st.bar_chart(df["company"].value_counts().head(10))
+
+st.subheader("🌍 Remote vs Non-Remote")
+st.bar_chart(df["is_remote"].value_counts())
+
+# ==============================
+# AI INSIGHTS
+# ==============================
+st.subheader("🧠 AI Insights")
+
+try:
+    insights = generate_insights(df)
+    st.json(insights)
+except Exception as e:
+    st.warning(f"Insights error: {e}")
+
+# ==============================
+# SUMMARY
+# ==============================
+st.subheader("📊 Job Summary")
+
+summary = {
+    "total_jobs": len(df),
+    "remote_jobs": int(df["is_remote"].sum()),
+    "top_company": df["company"].value_counts().idxmax(),
+    "senior_jobs": int(df["is_senior"].sum())
+}
+
+st.json(summary)
+
+# ==============================
+# REPORT
+# ==============================
+st.subheader("📄 Market Intelligence Report")
+
+try:
+    report = generate_report(df)
+    st.write(report.get("summary", "No summary available"))
+except Exception as e:
+    st.warning(f"Report error: {e}")
